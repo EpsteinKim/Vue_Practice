@@ -2,7 +2,7 @@
   <div>
     <img :src="product.image" class="room-img" />
     <h4>
-      <span class="open-modal" @click="$emit('openModal')">
+      <span class="open-modal" @click="$emit('openModal', product.title)">
         {{ product.title }}
       </span>
     </h4>
