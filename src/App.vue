@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal :modal="modal" :closeModal="closeModal" />
+    <Modal :modal="modal" @closeModal="closeModal" />
 
     <div class="menu">
       <a v-for="(menu, index) in menus" :key="index">{{ menu }}</a>
