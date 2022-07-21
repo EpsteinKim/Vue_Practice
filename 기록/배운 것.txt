@@ -11,5 +11,51 @@ $emit('이름', '데이터')
 @이벤트명="함수이름()"
 자식이 보낸 메시지가 오는 경우 해당 함수를 실행
 
-$event
+$event (e.target에서 e와 똑같은 역할이라고 생각하자)
 자식이 전달한 데이터를 수신
+
+input의 값들은 전부 문자열로 저장된다.
+숫자로 받고 싶다면 v-model.number
+
+watcher : data를 감시하는 함수 (캐싱 X)
+
+watch: {
+    data('변경될 값', '변경전 값'){
+        ...
+    }
+    data(값)
+}
+
+data가 변할때 마다 실행
+
+<transition name="작명">
+css에서 어떻게 작용할지 3개로 나누어서 작성
+시작할 때
+작명-enter-from{} : 시작 
+작명-enter-active{} : active의 과정 (transition)
+작명-enter-to{} : 끝
+
+끝날 때
+작명-leave-from {}
+작명-leave-active {}
+작명-leave-to {}
+
+sort 함수 사용
+array.sort() : 문자열 기반
+숫자 기반으로 하고 싶다면
+sort(function(a,b){
+    return a - b
+})
+리턴값이 음수라면 b를 왼쪽으로 보내주세요 ~
+- 하지만 sort함수는 원본데이터를 바꾼다.
+
+라이프사이클 (lifeCycle)
+컴포넌트는 웹페이지에 표시되기까지 일련의 step(라이프사이클)을 거침
+
+create : 데이터만 있는 상태
+mount : HTML로 만들어서 삽입시키는 단계
+컴포넌트 생성
+update 단계 ( 컴포넌트가 재 렌더링 될 때 )
+unmount : 컴포넌트가 삭제 될 때
+
+만약 setTimeOut같은 안에 들어가는 함수안에 this를 써야되는 경우가 온다면 화살표 함수로 써야 한다.

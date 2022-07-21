@@ -1,14 +1,22 @@
 <template>
   <div>
-    <Modal :modal="modal" @closeModal="closeModal" />
+    <transition name="fade">
+      <Modal :modal="modal" @closeModal="closeModal" />
+    </transition>
 
     <div class="menu">
       <a v-for="(menu, index) in menus" :key="index">{{ menu }}</a>
     </div>
 
-    <DiscountDiv />
+    <DiscountDiv :discountPer="discountPer" />
+
+    <button @click="priceLowSort">가격순 내림차순 정렬</button>
+    <button @click="priceHighSort">가격순 오름차순 정렬</button>
+    <button @click="nameSort">이름 순 정렬</button>
+    <button @click="sortBack">되돌리기</button>
+
     <div v-for="product in products" :key="product.id">
-      <CardDiv @openModal="openModal(product.title, product.content, product.image)" :product="product" />
+      <CardDiv @openModal="openModal(product)" :product="product" />
       <!-- custom event = @이름 : 이름이 수신되면 실행될 함수 -->
     </div>
   </div>
@@ -24,6 +32,7 @@ export default {
   name: "App",
   data() {
     return {
+      pureProducts: [...data],
       products: data,
       menus: ["Home", "Shop", "About"],
       singo: [0, 0, 0],
@@ -32,19 +41,56 @@ export default {
         title: "",
         content: "",
         image: "",
+        price: "",
       },
+      discountPer: 30,
     };
   },
   methods: {
-    openModal(title, content, image) {
+    openModal(product) {
+      const { title, content, image, price } = product;
       this.modal.on = true;
       this.modal.title = title;
       this.modal.content = content;
       this.modal.image = image;
+      this.modal.price = price;
     },
     closeModal() {
       this.modal.on = false;
     },
+    priceLowSort() {
+      this.products.sort(function (a, b) {
+        return a.price - b.price;
+      });
+    },
+    priceHighSort() {
+      this.products.sort((a, b) => b.price - a.price);
+    },
+    nameSort() {
+      this.products.sort(function (a, b) {
+        if (a.title > b.title) {
+          return 1;
+        }
+        if (a.title < b.title) {
+          return -1;
+        }
+        return 0;
+      });
+    },
+    sortBack() {
+      this.products = [...this.pureProducts];
+    },
+    percentageDownSec() {
+      const temp = setInterval(() => {
+        this.discountPer--;
+        if (this.discountPer == 0) {
+          clearInterval(temp);
+        }
+      }, 1000);
+    },
+  },
+  mounted() {
+    this.percentageDownSec();
   },
   components: {
     DiscountDiv,
@@ -55,6 +101,25 @@ export default {
 </script>
 
 <style>
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: all 500ms;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+.fade-leave-active {
+  transition: all 500ms;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
